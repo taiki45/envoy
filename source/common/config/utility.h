@@ -215,6 +215,15 @@ public:
   static std::string resourceName(const ProtobufWkt::Any& resource);
 
   /**
+   * Envoy can have both pre-defined tag names in well_known_names and user
+   * provided tag names through bootstrap configuration. Check the confilict of
+   * all the tag names to avoid unexpected tag name overwriting. If found a
+   * confilict, throw an exception.
+   * @param bootstrap bootstrap proto.
+   */
+  static void detectTagNameConflict(const envoy::api::v2::Bootstrap& bootstrap);
+
+  /**
    * Creates the set of stats tag extractors requested by the config and transfers ownership to the
    * caller.
    * @param bootstrap bootstrap proto.
@@ -222,6 +231,15 @@ public:
    */
   static std::vector<Stats::TagExtractorPtr>
   createTagExtractors(const envoy::api::v2::Bootstrap& bootstrap);
+
+  /**
+   * Creates the set of tags if TagSpecifiers have either "fixed_value" or "environment_variable"
+   * field. The tags will use as default tags. In other words, the tags will be added into all
+   * metrics. When "fixed_value" is specified, sets the raw value to the tag value. When
+   * "environment_variable" is specified, finds the variable and sets the returned value. If the
+   * variable is not found, throw an error.
+   */
+  static std::vector<Stats::Tag> createTags(const envoy::api::v2::Bootstrap& bootstrap);
 
   /**
    * Check user supplied name in RDS/CDS/LDS for sanity.

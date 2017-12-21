@@ -82,7 +82,9 @@ void ValidationInstance::initialize(Options& options,
     Config::BootstrapJson::translateBootstrap(*config_json, bootstrap);
   }
 
+  Config::Utility::detectTagNameConflict(bootstrap);
   tag_extractors_ = Config::Utility::createTagExtractors(bootstrap);
+  Config::Utility::createTags(bootstrap);
 
   bootstrap.mutable_node()->set_build_version(VersionInfo::version());
 
