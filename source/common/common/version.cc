@@ -6,10 +6,14 @@
 
 #include "fmt/format.h"
 
+extern const char build_version[];
 extern const char build_scm_revision[];
 extern const char build_scm_status[];
 
 namespace Envoy {
+const std::string& VersionInfo::versionNumber() {
+  CONSTRUCT_ON_FIRST_USE(std::string, build_version);
+}
 const std::string& VersionInfo::revision() {
   CONSTRUCT_ON_FIRST_USE(std::string, build_scm_revision);
 }
@@ -18,7 +22,7 @@ const std::string& VersionInfo::revisionStatus() {
 }
 
 std::string VersionInfo::version() {
-  return fmt::format("{}/{}/{}", revision(), revisionStatus(),
+  return fmt::format("{}/{}/{}/{}", versionNumber(), revision(), revisionStatus(),
 #ifdef NDEBUG
                      "RELEASE"
 #else

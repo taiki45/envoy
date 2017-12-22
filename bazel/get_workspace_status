@@ -12,9 +12,14 @@
 # If the script exits with non-zero code, it's considered as a failure
 # and the output will be discarded.
 
+# Rwrite the content of VERSION to let distributions show custom version
+# information.
+echo "BUILD_VERSION $(cat VERSION)"
+
 # If this SOURCE_VERSION file exists then it must have been placed here by a
 # distribution doing a non-git, source build.
-# Distributions would be expected to echo the commit/tag as BUILD_SCM_REVISION
+# Distributions would be expected to echo the git SHA1 hash as
+# BUILD_SCM_REVISION.
 if [ -f SOURCE_VERSION ]
 then
     echo "BUILD_SCM_REVISION $(cat SOURCE_VERSION)"
